@@ -1,4 +1,3 @@
-
 package battle;
 
 import java.awt.Color;
@@ -34,7 +33,6 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 import java.util.Random;
 import javax.swing.plaf.basic.BasicProgressBarUI;
-
 
 public class CampoBatalla extends javax.swing.JFrame {
 
@@ -100,9 +98,27 @@ public class CampoBatalla extends javax.swing.JFrame {
 
     }
 
-    /*public void detenerServidor() {
-        server.detenerEscucharRed();
-    }*/
+    /*
+        Método muy usado que sirve para asignar una imagen a un label determinado
+        se necesita el nombre del label y un string donde esta la ruta/dirrecion de la imagen que queremos asignar
+        lo mejor es que se escala con las dimensiones del label, es importante poner en la GUI
+        las dimensiones que queremos que este la imagen.
+        Es el encargado de poner a los mosnter y los elementos piedra, papel y tijera
+     */
+    public void setImage(JLabel labelName, String ruta) {
+        ImageIcon image = new ImageIcon(getClass().getResource(ruta));
+        Icon icon = new ImageIcon(
+                image.getImage().getScaledInstance(labelName.getWidth(), labelName.getHeight(), Image.SCALE_DEFAULT));
+        labelName.setIcon(icon);
+        this.repaint();
+    }
+
+    /*
+        Este metodo lo que hace es enviar la imagen del monster que elegiste para que la pantalla de tu rival se observe
+        que monster elegiste.
+        Se enviar un String que contiene la dirección de la imagen y por consiguiente se espera el String de la
+        direccion del rival y con el metodo setImage se pone la imagen en su respectivo lugar
+     */
     public void EnivarImagen(String imagen) {
         try {
             out.writeUTF(imagen);
@@ -113,6 +129,12 @@ public class CampoBatalla extends javax.swing.JFrame {
         }
     }
 
+    /*
+        Método usado para enviar la vida max, la vida actual, el atq y la evasion de tu monster y respectivamente 
+        recibe esos valores de tu rival.
+        Tambien es el encargado de llamar el metodo verificarSiGanaste que verifica si hubo un ganador
+        al igual que el llamado del metodo actualizarBarOponente que actiualiza el progress bar del rival (su grafica de vida)
+     */
     public int enviarDatos(int vidaMax) {
         try {
             out.writeUTF(String.valueOf(vidaMax));
@@ -129,6 +151,24 @@ public class CampoBatalla extends javax.swing.JFrame {
             labelAtq1.setText(String.valueOf(atqOponente));
             labelEvasion1.setText(String.valueOf(evasionOponente));
             labelVidaActualOponente.setText(String.valueOf(vidaOponente));*/
+            verificarSiGanaste(vidaOponente);
+            actualizarBarOponente(Integer.parseInt(vidaMaxOponente), Integer.parseInt(vidaOponente));
+
+            return Integer.parseInt(atqOponente);
+
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        return 0;
+
+    }
+
+    /*
+        Método en el cual se verifica si uno de los dos jugadores gano y 
+        si uno de ellos es el host es el encargado de cerrar el servidor
+     */
+    public void verificarSiGanaste(String vidaOponente) {
+        try {
             if (Integer.parseInt(vidaOponente) <= 0 && eresServidor == "1") {
                 servidor.close();
                 this.setVisible(false);
@@ -139,7 +179,6 @@ public class CampoBatalla extends javax.swing.JFrame {
             if (Integer.parseInt(vidaOponente) <= 0 && eresServidor == "0") {
                 this.setVisible(false);
                 JOptionPane.showMessageDialog(null, "Haz ganado");
-                //detenerServidor();
                 Inicio inicio = new Inicio();
                 inicio.setVisible(true);
             }
@@ -157,20 +196,19 @@ public class CampoBatalla extends javax.swing.JFrame {
                 Inicio inicio = new Inicio();
                 inicio.setVisible(true);
             }
-
-            actualizarBarOponente(Integer.parseInt(vidaMaxOponente), Integer.parseInt(vidaOponente));
-
-            //String[] datosOponentes = {vidaOponente, defOponente, evasionOponente};
-            //actualizarBarOponente(datosOponentes, vidaOponente);
-            return Integer.parseInt(atqOponente);
-
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        return 0;
-
     }
 
+    /*
+        Metodo que actualiza el progress bar del oponente en donde se asigna un minimo en este caso 0 y 
+        un maximo que es la vida maxima del oponente, igual se colorea de negro el valor del progress bar para verse mejor
+        este metodo es el encargado de asignar colores dependiendo de la vida actual del oponente
+        donde un 0.8 por encima de la vida maxima es de color verde
+        un 0.4 por arriba es de color naranja
+        y por debajo es de color rojo
+     */
     public void actualizarBarOponente(int vidaMax, int vidaActual) {
         barVidaOponente.setMinimum(0);
         barVidaOponente.setMaximum(vidaMax);
@@ -190,6 +228,9 @@ public class CampoBatalla extends javax.swing.JFrame {
         }
     }
 
+    /*
+        Nos ayuda a colorear el String que tiene el progress Bar
+     */
     private static class CustomProgressBarUI extends BasicProgressBarUI {
 
         private final Color textColor;
@@ -218,6 +259,13 @@ public class CampoBatalla extends javax.swing.JFrame {
         }
     }
 
+    /*
+       Actualiza nuestro progress bar con la vida actual que tenemos con respecto de nuestra vida maxima 
+            este metodo es el encargado de asignar colores dependiendo de la vida actual 
+        donde un 0.8 por encima de la vida maxima es de color verde
+        un 0.4 por arriba es de color naranja
+        y por debajo es de color rojo
+     */
     public void barActualizar(int vidaMax, int vidaActual, int daño) {
         barVida.setMinimum(0);
         barVida.setMaximum(vidaMax);
@@ -248,77 +296,12 @@ public class CampoBatalla extends javax.swing.JFrame {
         this.vida = vida;
     }
 
-    public String esquive(int esquivar) {
-
-        if (esquivar < evasion) {
-            return "1";
-        } else {
-            return "0";
-        }
-
-    }
 
     public void tijera(int vidaMax, int ataqueOponente) {
         labelTijera.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 CalculoDelDuelo("tijera", vidaMax, ataqueOponente);
-                /*
-                
-                // Actualiza el label inmediatamente después del clic
-                label.setText("Usaste tijera");
-                System.out.println("¡tijera clickeada!");
-
-                new Thread(() -> {
-                    try {
-                        // Envía la jugada al servidor en un hilo separado
-                        out.writeUTF("tijera");
-
-                        // Espera y recibe la jugada del oponente
-                        String mensaje = in.readUTF();
-                        System.out.println("El oponente uso: " + mensaje);
-
-                        Random rand = new Random();
-                        int esquivar = rand.nextInt(100);
-                        String esquiveTuAtaque = esquive(esquivar);
-                        out.writeUTF(esquiveTuAtaque);
-                        String miOponenteEsquivo = in.readUTF();
-
-                        // Verifica si el mensaje no es nulo y muestra el diálogo
-                        if (mensaje != null) {
-                            SwingUtilities.invokeLater(() -> {
-                                //JOptionPane.showMessageDialog(null, "El oponente uso: " + mensaje);
-
-                                if (mensaje.equals("piedra") && esquivar > evasion) {
-                                    barActualizar(vidaMax, getVida(), ataqueOponente);
-                                    System.out.println("te hizo daño");
-                                    enviarDatos(vidaMax);
-                                    JOptionPane.showMessageDialog(null, "El oponente uso: " + mensaje + " y te infligio " + ataqueOponente + " de daño");
-                                }
-                                if (mensaje.equals("piedra") && esquivar < evasion) {
-                                    enviarDatos(vidaMax);
-                                    JOptionPane.showMessageDialog(null, "El oponente uso: " + mensaje + " pero lo esquivaste :)");
-                                }
-                                if (mensaje.equals("papel") && miOponenteEsquivo.equals("1")) {
-                                    enviarDatos(vidaMax);
-                                    JOptionPane.showMessageDialog(null, "El oponente uso: " + mensaje + " pero lo esquivo :c");
-                                }
-                                if (mensaje.equals("papel") && miOponenteEsquivo.equals("0")) {
-                                    enviarDatos(vidaMax);
-                                    JOptionPane.showMessageDialog(null, "El oponente uso: " + mensaje + " le inflijiste " + atq + " de daño");
-                                }
-                            });
-                        }
-                    } catch (SocketException ex) {
-                        JOptionPane.showMessageDialog(null, "Cliente Desconectado");
-                    } catch (IOException ex) {
-                        java.util.logging.Logger.getLogger(Server.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-                    } catch (NullPointerException ex) {
-                        JOptionPane.showMessageDialog(null, "Ningún cliente conectado");
-                    }
-
-                }
-                ).start();*/
             }
         }
         );
@@ -329,56 +312,6 @@ public class CampoBatalla extends javax.swing.JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 CalculoDelDuelo("papel", vidaMax, ataqueOponente);
-                /*
-                // Actualiza el label inmediatamente después del clic
-                label.setText("Usaste papel");
-                System.out.println("¡papel clickeada!");
-
-                new Thread(() -> {
-                    try {
-                        // Envía la jugada al servidor en un hilo separado
-                        out.writeUTF("papel");
-
-                        // Espera y recibe la jugada del oponente
-                        String mensaje = in.readUTF();
-                        System.out.println("El oponente uso: " + mensaje);
-
-                        Random rand = new Random();
-                        int esquivar = rand.nextInt(100);
-                        String esquiveTuAtaque = esquive(esquivar);
-                        out.writeUTF(esquiveTuAtaque);
-                        String miOponenteEsquivo = in.readUTF();
-
-                        // Verifica si el mensaje no es nulo y muestra el diálogo
-                        if (mensaje != null) {
-                            SwingUtilities.invokeLater(() -> {
-                                //JOptionPane.showMessageDialog(null, "El oponente uso: " + mensaje);
-                                if (mensaje.equals("tijera") && esquivar > evasion) {
-                                    barActualizar(vidaMax, getVida(), ataqueOponente);
-                                    System.out.println("te hizo daño");
-                                    enviarDatos(vidaMax);
-                                    JOptionPane.showMessageDialog(null, "El oponente uso: " + mensaje + " y te infligio " + ataqueOponente + " de daño");
-                                }
-                                if (mensaje.equals("tijera") && esquivar < evasion) {
-                                    enviarDatos(vidaMax);
-                                    JOptionPane.showMessageDialog(null, "El oponente uso: " + mensaje + " pero lo esquivaste :)");
-                                }
-                                if (mensaje.equals("piedra") && miOponenteEsquivo.equals("1")) {
-                                    enviarDatos(vidaMax);
-                                    JOptionPane.showMessageDialog(null, "El oponente uso: " + mensaje + " pero lo esquivo :c");
-                                }
-                                if (mensaje.equals("piedra") && miOponenteEsquivo.equals("0")) {
-                                    enviarDatos(vidaMax);
-                                    JOptionPane.showMessageDialog(null, "El oponente uso: " + mensaje + " le inflijiste " + atq + " de daño");
-                                }
-                            });
-                        }
-
-                    } catch (IOException ex) {
-                        // Manejo de la excepción
-                        ex.printStackTrace();
-                    }
-                }).start();*/
             }
         });
     }
@@ -388,86 +321,43 @@ public class CampoBatalla extends javax.swing.JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 CalculoDelDuelo("piedra", vidaMax, ataqueOponente);
-                // Actualiza el label inmediatamente después del clic
-                /*
-                label.setText("Usaste piedra");
-                System.out.println("¡piedra clickeada!");
 
-                new Thread(() -> {
-                    try {
-                        // Envía la jugada al servidor en un hilo separado
-                        out.writeUTF("piedra");
-
-                        // Espera y recibe la jugada del oponente
-                        String mensaje = in.readUTF();
-                        System.out.println("El oponente uso: " + mensaje);
-
-                        Random rand = new Random();
-                        int esquivar = rand.nextInt(100);
-                        String esquiveTuAtaque = esquive(esquivar);
-                        out.writeUTF(esquiveTuAtaque);
-                        String miOponenteEsquivo = in.readUTF();
-
-                        // Verifica si el mensaje no es nulo y muestra el diálogo
-                        if (mensaje != null) {
-                            SwingUtilities.invokeLater(() -> {
-                                //JOptionPane.showMessageDialog(null, "El oponente uso: " + mensaje);
-                                if (mensaje.equals("papel") && esquivar > evasion) {
-                                    barActualizar(vidaMax, getVida(), ataqueOponente);
-                                    System.out.println("te hizo daño");
-                                    enviarDatos(vidaMax);
-                                    JOptionPane.showMessageDialog(null, "El oponente uso: " + mensaje + " y te infligio " + ataqueOponente + " de daño");
-                                }
-                                if (mensaje.equals("papel") && esquivar < evasion) {
-                                    enviarDatos(vidaMax);
-                                    JOptionPane.showMessageDialog(null, "El oponente uso: " + mensaje + " pero lo esquivaste :)");
-                                }
-                                if (mensaje.equals("tijera") && miOponenteEsquivo.equals("1")) {
-                                    enviarDatos(vidaMax);
-                                    JOptionPane.showMessageDialog(null, "El oponente uso: " + mensaje + " pero lo esquivo :c");
-                                }
-                                if (mensaje.equals("tijera") && miOponenteEsquivo.equals("0")) {
-                                    enviarDatos(vidaMax);
-                                    JOptionPane.showMessageDialog(null, "El oponente uso: " + mensaje + " le inflijiste " + atq + " de daño");
-                                }
-
-                            });
-
-                        }
-
-                    } catch (IOException ex) {
-                        // Manejo de la excepción
-                        ex.printStackTrace();
-                    }
-                }).start();*/
             }
         });
     }
-
+    /*
+        Verifica si esquivaste el ataque por medio de tu evasion
+    */
     public String yoEsquive() {
 
         Random rand = new Random();
         int esquivar = rand.nextInt(100);
         if (esquivar < evasion) {
-            //out.writeUTF("1");
-            //String miOponenteEsquivo = in.readUTF();
             return "1";
         } else {
-            //out.writeUTF("0");
-            //String miOponenteEsquivo = in.readUTF();
             return "0";
         }
     }
-
+    
+    /*
+        Este es el metodo que calcula si ganaste el duelo de PPT
+        lo que hace es mandar la eleccion de tu ataque y recibe la eleccion de tu rival
+        llama el metodo de yoEsquive si verifica si esquivaste y lo manda al rival y recibe si el rival esquivo
+        si uno de los dos esquivo no se efectua un calculo de daño, en caso contrario si los dos no esquivaron 
+        se hace el calculo de daño en donde tu eleccion es x e y es la del rival,
+        se verifica en la matriz de debilidades y si es un -1 significa que perdiste el duelo y por ende recibes 
+        daño al igual al ataque de tu oponente y es un 1 ganaste al rival y si es 0 es que ambos usaron el mismo ataque
+        en cada caso se usa el metodo enviarDatos para actualizar su progress bar de vida y verificar si alguien gano
+    */
     public void CalculoDelDuelo(String miEleccion, int vidaMax, int ataqueOponente) {
-        label.setText("Usaste " + miEleccion);
+        labelEleccion.setText("Usaste " + miEleccion);
         new Thread(() -> {
             try {
                 out.writeUTF(miEleccion);
                 panelEsperar.setVisible(true);
                 String oponenteEleccion = in.readUTF();
                 if (oponenteEleccion != null) {
-                   panelEsperar.setVisible(false); 
+                    panelEsperar.setVisible(false);
                 }
                 String esquivar = yoEsquive();
                 out.writeUTF(esquivar);
@@ -523,7 +413,7 @@ public class CampoBatalla extends javax.swing.JFrame {
         labelPiedra = new javax.swing.JLabel();
         labelPapel = new javax.swing.JLabel();
         labelTijera = new javax.swing.JLabel();
-        label = new javax.swing.JLabel();
+        labelEleccion = new javax.swing.JLabel();
         panelEsperar = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -561,8 +451,6 @@ public class CampoBatalla extends javax.swing.JFrame {
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
-
-        label.setOpaque(true);
 
         jLabel1.setText("Esperando Oponente");
 
@@ -618,7 +506,7 @@ public class CampoBatalla extends javax.swing.JFrame {
                                 .addComponent(labelMonster1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(213, 213, 213)
                                 .addComponent(labelMonster2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(labelEleccion, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(173, 173, 173)
                         .addComponent(labelTijera, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -642,7 +530,7 @@ public class CampoBatalla extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addComponent(panelEsperar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(142, 142, 142)
-                .addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(labelEleccion, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(labelMonster2, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -685,44 +573,37 @@ public class CampoBatalla extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-    /* Set the Nimbus look and feel */
-    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-     */
-    try {
-        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-            if ("Nimbus".equals(info.getName())) {
-                javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                break;
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
             }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-    } catch (ClassNotFoundException ex) {
-        java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (InstantiationException ex) {
-        java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (IllegalAccessException ex) {
-        java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-        java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new CampoBatalla(out, in, monster, servidor, eresServidor).setVisible(true);
+            }
+        });
     }
-    //</editor-fold>
 
-    /* Create and display the form */
-    java.awt.EventQueue.invokeLater(new Runnable() {
-        public void run() {
-            new CampoBatalla(out, in, monster, servidor, eresServidor).setVisible(true);
-        }
-    });
-}
-
-    public void setImage(JLabel labelName, String ruta) {
-    ImageIcon image = new ImageIcon(getClass().getResource(ruta));
-    Icon icon = new ImageIcon(
-            image.getImage().getScaledInstance(labelName.getWidth(), labelName.getHeight(), Image.SCALE_DEFAULT));
-    labelName.setIcon(icon);
-    this.repaint();
-}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar barVida;
@@ -730,7 +611,7 @@ public class CampoBatalla extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel label;
+    private javax.swing.JLabel labelEleccion;
     private javax.swing.JLabel labelMonster1;
     private javax.swing.JLabel labelMonster2;
     private javax.swing.JLabel labelPapel;

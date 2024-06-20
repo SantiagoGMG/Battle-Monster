@@ -48,7 +48,7 @@
                                   <EmptySpace min="-2" pref="213" max="-2" attributes="0"/>
                                   <Component id="labelMonster2" min="-2" pref="85" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="label" min="-2" pref="81" max="-2" attributes="0"/>
+                              <Component id="labelEleccion" min="-2" pref="81" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -80,7 +80,7 @@
                   <EmptySpace pref="31" max="32767" attributes="0"/>
                   <Component id="panelEsperar" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="142" max="-2" attributes="0"/>
-                  <Component id="label" min="-2" pref="16" max="-2" attributes="0"/>
+                  <Component id="labelEleccion" min="-2" pref="16" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="labelMonster2" min="-2" pref="72" max="-2" attributes="0"/>
@@ -117,10 +117,7 @@
             <EventHandler event="ancestorAdded" listener="javax.swing.event.AncestorListener" parameters="javax.swing.event.AncestorEvent" handler="labelTijeraAncestorAdded"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="label">
-          <Properties>
-            <Property name="opaque" type="boolean" value="true"/>
-          </Properties>
+        <Component class="javax.swing.JLabel" name="labelEleccion">
         </Component>
         <Container class="javax.swing.JPanel" name="panelEsperar">
 
