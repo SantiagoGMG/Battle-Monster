@@ -1,3 +1,4 @@
+
 package battle;
 
 import java.awt.Color;
@@ -34,6 +35,7 @@ import javax.swing.SwingUtilities;
 import java.util.Random;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 
+
 public class CampoBatalla extends javax.swing.JFrame {
 
     public static DataOutputStream out;
@@ -44,9 +46,25 @@ public class CampoBatalla extends javax.swing.JFrame {
     static String eresServidor;
     static ServerSocket servidor;
 
+    /*  Es una matriz que indica las debilidades de cada elemento, 
+                piedra , papel o tijera 
+        piedra    0      -1      1
+        papel     1       0     -1
+        tijera   -1       1      0
+        donde 0 es empate, -1 pierde contra ese elemento, 1 ganas a ese elemento
+     */
+    private int[][] debilidades = {
+        {0, -1, 1},
+        {1, 0, -1},
+        {-1, 1, 0},};
+    //iniciamos un objeto elemento con cualquier valor, esto nos servirá despues para obtener los valores que envian los jugadores
+    Elementos elementosMio = Elementos.valueOf("piedra");
+    Elementos elementosOponente = Elementos.valueOf("piedra");
+
     //int vida=monster.getVida();
     public CampoBatalla(DataOutputStream out, DataInputStream in, Monster monster, ServerSocket servidor, String eresServidor) {
         initComponents();
+        panelEsperar.setVisible(false);
         int vidaMax = monster.getVida();
         this.vida = monster.getVida();
         this.atq = monster.getAtq();
@@ -231,6 +249,7 @@ public class CampoBatalla extends javax.swing.JFrame {
     }
 
     public String esquive(int esquivar) {
+
         if (esquivar < evasion) {
             return "1";
         } else {
@@ -243,6 +262,9 @@ public class CampoBatalla extends javax.swing.JFrame {
         labelTijera.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                CalculoDelDuelo("tijera", vidaMax, ataqueOponente);
+                /*
+                
                 // Actualiza el label inmediatamente después del clic
                 label.setText("Usaste tijera");
                 System.out.println("¡tijera clickeada!");
@@ -296,7 +318,7 @@ public class CampoBatalla extends javax.swing.JFrame {
                     }
 
                 }
-                ).start();
+                ).start();*/
             }
         }
         );
@@ -306,6 +328,8 @@ public class CampoBatalla extends javax.swing.JFrame {
         labelPapel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                CalculoDelDuelo("papel", vidaMax, ataqueOponente);
+                /*
                 // Actualiza el label inmediatamente después del clic
                 label.setText("Usaste papel");
                 System.out.println("¡papel clickeada!");
@@ -354,7 +378,7 @@ public class CampoBatalla extends javax.swing.JFrame {
                         // Manejo de la excepción
                         ex.printStackTrace();
                     }
-                }).start();
+                }).start();*/
             }
         });
     }
@@ -363,7 +387,9 @@ public class CampoBatalla extends javax.swing.JFrame {
         labelPiedra.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                CalculoDelDuelo("piedra", vidaMax, ataqueOponente);
                 // Actualiza el label inmediatamente después del clic
+                /*
                 label.setText("Usaste piedra");
                 System.out.println("¡piedra clickeada!");
 
@@ -413,9 +439,78 @@ public class CampoBatalla extends javax.swing.JFrame {
                         // Manejo de la excepción
                         ex.printStackTrace();
                     }
-                }).start();
+                }).start();*/
             }
         });
+    }
+
+    public String yoEsquive() {
+
+        Random rand = new Random();
+        int esquivar = rand.nextInt(100);
+        if (esquivar < evasion) {
+            //out.writeUTF("1");
+            //String miOponenteEsquivo = in.readUTF();
+            return "1";
+        } else {
+            //out.writeUTF("0");
+            //String miOponenteEsquivo = in.readUTF();
+            return "0";
+        }
+    }
+
+    public void CalculoDelDuelo(String miEleccion, int vidaMax, int ataqueOponente) {
+        label.setText("Usaste " + miEleccion);
+        new Thread(() -> {
+            try {
+                out.writeUTF(miEleccion);
+                panelEsperar.setVisible(true);
+                String oponenteEleccion = in.readUTF();
+                if (oponenteEleccion != null) {
+                   panelEsperar.setVisible(false); 
+                }
+                String esquivar = yoEsquive();
+                out.writeUTF(esquivar);
+                String oponenteEsquivar = in.readUTF();
+
+                if (esquivar.equals("0") && oponenteEsquivar.equals("0")) {
+
+                    int mio = elementosMio.valueOf(miEleccion).getValor();
+                    int oponente = elementosOponente.valueOf(oponenteEleccion).getValor();
+                    int parametro = debilidades[mio][oponente];
+
+                    SwingUtilities.invokeLater(() -> {
+                        switch (parametro) {
+                            case 1: {
+                                enviarDatos(vidaMax);
+                                JOptionPane.showMessageDialog(null, "El oponente uso: " + oponenteEleccion + " le inflijiste " + atq + " de daño");
+                                break;
+                            }
+                            case -1: {
+                                barActualizar(vidaMax, getVida(), ataqueOponente);
+                                enviarDatos(vidaMax);
+                                JOptionPane.showMessageDialog(null, "El oponente uso: " + oponenteEleccion + " y te infligio " + ataqueOponente + " de daño");
+                                break;
+                            }
+                            case 0: {
+                                JOptionPane.showMessageDialog(null, "El oponente uso: " + oponenteEleccion + "hubo un empate");
+                                break;
+                            }
+                        }
+                    });
+                } else if (esquivar.equals("1")) {
+                    enviarDatos(vidaMax);
+                    JOptionPane.showMessageDialog(null, "El oponente uso: " + oponenteEleccion + " pero lo esquivaste :)");
+
+                } else if (oponenteEsquivar.equals("1")) {
+                    enviarDatos(vidaMax);
+                    JOptionPane.showMessageDialog(null, "El oponente uso: " + oponenteEleccion + " pero lo esquivo :c");
+                }
+
+            } catch (IOException ex) {
+                java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            }
+        }).start();
     }
 
     @SuppressWarnings("unchecked")
@@ -429,6 +524,9 @@ public class CampoBatalla extends javax.swing.JFrame {
         labelPapel = new javax.swing.JLabel();
         labelTijera = new javax.swing.JLabel();
         label = new javax.swing.JLabel();
+        panelEsperar = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
         barVida = new javax.swing.JProgressBar();
         barVidaOponente = new javax.swing.JProgressBar();
 
@@ -466,6 +564,47 @@ public class CampoBatalla extends javax.swing.JFrame {
 
         label.setOpaque(true);
 
+        jLabel1.setText("Esperando Oponente");
+
+        javax.swing.GroupLayout panelEsperarLayout = new javax.swing.GroupLayout(panelEsperar);
+        panelEsperar.setLayout(panelEsperarLayout);
+        panelEsperarLayout.setHorizontalGroup(
+            panelEsperarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelEsperarLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panelEsperarLayout.setVerticalGroup(
+            panelEsperarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEsperarLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jPanel2.setOpaque(false);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(barVida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
+                .addComponent(barVidaOponente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(barVida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(barVidaOponente, javax.swing.GroupLayout.DEFAULT_SIZE, 16, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -473,36 +612,36 @@ public class CampoBatalla extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(108, 108, 108)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(labelMonster1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(213, 213, 213)
+                                .addComponent(labelMonster2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(173, 173, 173)
                         .addComponent(labelTijera, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(labelPiedra, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(labelPapel, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addGap(108, 108, 108)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(labelMonster1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(labelMonster2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addGap(76, 76, 76)
-                            .addComponent(barVida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(118, 118, 118)
-                            .addComponent(barVidaOponente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(90, 114, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(208, 208, 208)
+                        .addComponent(panelEsperar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(63, 63, 63)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(barVidaOponente, javax.swing.GroupLayout.DEFAULT_SIZE, 16, Short.MAX_VALUE)
-                    .addComponent(barVida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(203, 203, 203)
+                .addGap(24, 24, 24)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addComponent(panelEsperar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(142, 142, 142)
                 .addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -546,54 +685,57 @@ public class CampoBatalla extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    /* Set the Nimbus look and feel */
+    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+     */
+    try {
+        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            if ("Nimbus".equals(info.getName())) {
+                javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                break;
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new CampoBatalla(out, in, monster, servidor, eresServidor).setVisible(true);
-            }
-        });
+    } catch (ClassNotFoundException ex) {
+        java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (InstantiationException ex) {
+        java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (IllegalAccessException ex) {
+        java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
     }
+    //</editor-fold>
+
+    /* Create and display the form */
+    java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+            new CampoBatalla(out, in, monster, servidor, eresServidor).setVisible(true);
+        }
+    });
+}
 
     public void setImage(JLabel labelName, String ruta) {
-        ImageIcon image = new ImageIcon(getClass().getResource(ruta));
-        Icon icon = new ImageIcon(
-                image.getImage().getScaledInstance(labelName.getWidth(), labelName.getHeight(), Image.SCALE_DEFAULT));
-        labelName.setIcon(icon);
-        this.repaint();
-    }
+    ImageIcon image = new ImageIcon(getClass().getResource(ruta));
+    Icon icon = new ImageIcon(
+            image.getImage().getScaledInstance(labelName.getWidth(), labelName.getHeight(), Image.SCALE_DEFAULT));
+    labelName.setIcon(icon);
+    this.repaint();
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar barVida;
     private javax.swing.JProgressBar barVidaOponente;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel label;
     private javax.swing.JLabel labelMonster1;
     private javax.swing.JLabel labelMonster2;
     private javax.swing.JLabel labelPapel;
     private javax.swing.JLabel labelPiedra;
     private javax.swing.JLabel labelTijera;
+    private javax.swing.JPanel panelEsperar;
     // End of variables declaration//GEN-END:variables
 }
