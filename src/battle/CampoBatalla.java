@@ -43,7 +43,7 @@ public class CampoBatalla extends javax.swing.JFrame {
     static Monster monster;
     static String eresServidor;
     static ServerSocket servidor;
-
+    private boolean seleccion = false;
     /*  Es una matriz que indica las debilidades de cada elemento, 
                 piedra , papel o tijera 
         piedra    0      -1      1
@@ -59,7 +59,6 @@ public class CampoBatalla extends javax.swing.JFrame {
     Elementos elementosMio = Elementos.valueOf("piedra");
     Elementos elementosOponente = Elementos.valueOf("piedra");
 
-    //int vida=monster.getVida();
     public CampoBatalla(DataOutputStream out, DataInputStream in, Monster monster, ServerSocket servidor, String eresServidor) {
         initComponents();
         panelEsperar.setVisible(false);
@@ -83,10 +82,7 @@ public class CampoBatalla extends javax.swing.JFrame {
         EnivarImagen(imagenMonster);
 
         //setImage(labelMonster2, "/battle/imagenes/monster/monster3a.png");
-        setImage(labelPiedra, "/battle/imagenes/piedra.png");
-        setImage(labelPapel, "/battle/imagenes/papel.png");
-        setImage(labelTijera, "/battle/imagenes/tijera.png");
-
+        setImageElementosPPT();
         /*labelVida.setText(String.valueOf(vidaMax));
         labelAtq.setText(String.valueOf(atq));
         labelEvasion.setText(String.valueOf(evasion));*/
@@ -96,6 +92,17 @@ public class CampoBatalla extends javax.swing.JFrame {
         piedra(vidaMax, ataqueOponente);
         papel(vidaMax, ataqueOponente);
 
+    }
+
+    /*
+        Metodo que pone las imagenes de los elementos de PPT
+        util a la hora de que el oponente selecciono 1 elemento este se cambia a su otra version
+        de presionado, y cuando se resuelve todo se debe de poner en su version normal
+     */
+    public void setImageElementosPPT() {
+        setImage(labelPiedra, "/battle/imagenes/piedra_1.png");
+        setImage(labelPapel, "/battle/imagenes/papel_1.png");
+        setImage(labelTijera, "/battle/imagenes/tijera_1.png");
     }
 
     /*
@@ -122,8 +129,10 @@ public class CampoBatalla extends javax.swing.JFrame {
     public void EnivarImagen(String imagen) {
         try {
             out.writeUTF(imagen);
+            JOptionPane.showMessageDialog(null, "Espere al rival");
             String imagenOponente = in.readUTF();
             setImage(labelMonster2, imagenOponente);
+
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
@@ -296,12 +305,31 @@ public class CampoBatalla extends javax.swing.JFrame {
         this.vida = vida;
     }
 
-
     public void tijera(int vidaMax, int ataqueOponente) {
         labelTijera.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                if (seleccion == false) {
+                setImage(labelTijera, "/battle/imagenes/tijeraOscuro.png");
+                }
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (seleccion == false) {
+                setImage(labelTijera, "/battle/imagenes/tijera_1.png");
+                }
+            }
+
             @Override
             public void mouseClicked(MouseEvent e) {
-                CalculoDelDuelo("tijera", vidaMax, ataqueOponente);
+                if (seleccion == false) {
+                    seleccion = true;
+                    setImage(labelTijera, "/battle/imagenes/tijeraOscuro.png");
+                    labelEleccion.setVisible(false);
+                    CalculoDelDuelo("tijera", vidaMax, ataqueOponente);
+
+                }
+
             }
         }
         );
@@ -310,8 +338,29 @@ public class CampoBatalla extends javax.swing.JFrame {
     public void papel(int vidaMax, int ataqueOponente) {
         labelPapel.addMouseListener(new MouseAdapter() {
             @Override
+            public void mouseEntered(MouseEvent e) {
+                if (seleccion == false) {
+                setImage(labelPapel, "/battle/imagenes/papelOscuro.png");
+                }
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (seleccion == false) {
+                setImage(labelPapel, "/battle/imagenes/papel_1.png");
+                }
+            }
+
+            @Override
             public void mouseClicked(MouseEvent e) {
-                CalculoDelDuelo("papel", vidaMax, ataqueOponente);
+                if (seleccion == false) {
+                    seleccion = true;
+                    setImage(labelPapel, "/battle/imagenes/papelOscuro.png");
+                    labelEleccion.setVisible(false);
+                    CalculoDelDuelo("papel", vidaMax, ataqueOponente);
+
+                }
+
             }
         });
     }
@@ -319,15 +368,36 @@ public class CampoBatalla extends javax.swing.JFrame {
     public void piedra(int vidaMax, int ataqueOponente) {
         labelPiedra.addMouseListener(new MouseAdapter() {
             @Override
+            public void mouseEntered(MouseEvent e) {
+                if (seleccion == false) {
+                setImage(labelPiedra, "/battle/imagenes/piedraOscuro.png");
+                }
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (seleccion == false) {
+                setImage(labelPiedra, "/battle/imagenes/piedra_1.png");
+                }
+            }
+
+            @Override
             public void mouseClicked(MouseEvent e) {
-                CalculoDelDuelo("piedra", vidaMax, ataqueOponente);
+                if (seleccion == false) {
+                    seleccion = true;
+                    setImage(labelPiedra, "/battle/imagenes/piedraOscuro.png");
+                    labelEleccion.setVisible(false);
+                    CalculoDelDuelo("piedra", vidaMax, ataqueOponente);
+
+                }
 
             }
         });
     }
+
     /*
         Verifica si esquivaste el ataque por medio de tu evasion
-    */
+     */
     public String yoEsquive() {
 
         Random rand = new Random();
@@ -338,7 +408,7 @@ public class CampoBatalla extends javax.swing.JFrame {
             return "0";
         }
     }
-    
+
     /*
         Este es el metodo que calcula si ganaste el duelo de PPT
         lo que hace es mandar la eleccion de tu ataque y recibe la eleccion de tu rival
@@ -348,8 +418,9 @@ public class CampoBatalla extends javax.swing.JFrame {
         se verifica en la matriz de debilidades y si es un -1 significa que perdiste el duelo y por ende recibes 
         daño al igual al ataque de tu oponente y es un 1 ganaste al rival y si es 0 es que ambos usaron el mismo ataque
         en cada caso se usa el metodo enviarDatos para actualizar su progress bar de vida y verificar si alguien gano
-    */
+     */
     public void CalculoDelDuelo(String miEleccion, int vidaMax, int ataqueOponente) {
+        labelEleccion.setVisible(true);
         labelEleccion.setText("Usaste " + miEleccion);
         new Thread(() -> {
             try {
@@ -395,11 +466,15 @@ public class CampoBatalla extends javax.swing.JFrame {
                 } else if (oponenteEsquivar.equals("1")) {
                     enviarDatos(vidaMax);
                     JOptionPane.showMessageDialog(null, "El oponente uso: " + oponenteEleccion + " pero lo esquivo :c");
+
                 }
 
             } catch (IOException ex) {
                 java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
+            seleccion = false;
+            setImageElementosPPT();
+            labelEleccion.setVisible(false);
         }).start();
     }
 
