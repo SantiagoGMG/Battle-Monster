@@ -61,44 +61,34 @@ public class Server extends javax.swing.JFrame {
 
         @Override
         public void run() {
-            try {
-                while (bandera == true) {
-                    try {
-                        socket = servidor.accept(); //Espera a que un cliente se conecte y almacena su socket
-                        JOptionPane.showMessageDialog(null, "Tu rival se ha conectado");
-                        comenzarBoton.setVisible(true);
-                        in = new DataInputStream(socket.getInputStream());
-                        out = new DataOutputStream(socket.getOutputStream());
-
-                    } catch (EOFException ex) //El cliente se desconecto
-                    {
-                        JOptionPane.showMessageDialog(null, "El cliente se desconectó");
-                        break;
-                    } catch (SocketException ex) {
-
-                    } catch (Exception ex) {
-                        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
-                    if (socket == null) {
-                        socket.close();
-                    }
-                }
-
-            } catch (IOException ex) {
-                //Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                // Limpieza de recursos
+            while (bandera == true) {
                 try {
-                    if (socket != null && !socket.isClosed()) {
-                        socket.close();
-                    }
-                    if (servidor != null && !servidor.isClosed()) {
-                        servidor.close();
-                    }
-                } catch (IOException e) {
-                    Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, e);
+                    socket = servidor.accept(); //Espera a que un cliente se conecte y almacena su socket
+                    JOptionPane.showMessageDialog(null, "Tu rival se ha conectado");
+                    comenzarBoton.setVisible(true);
+                    in = new DataInputStream(socket.getInputStream());
+                    out = new DataOutputStream(socket.getOutputStream());
+                    
+                } catch (EOFException ex) //El cliente se desconecto
+                {
+                    JOptionPane.showMessageDialog(null, "El cliente se desconectó");
+                    break;
+                } catch (SocketException ex) {
+                    
+                } catch (Exception ex) {
+                    Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            } //Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            // Limpieza de recursos
+            try {
+                if (socket != null && !socket.isClosed()) {
+                    socket.close();
+                }
+                if (servidor != null && !servidor.isClosed()) {
+                    servidor.close();
+                }
+            } catch (IOException e) {
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, e);
             }
         }
 

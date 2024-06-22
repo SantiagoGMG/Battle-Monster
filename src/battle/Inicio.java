@@ -35,6 +35,8 @@ public class Inicio extends javax.swing.JFrame {
         crearBoton = new javax.swing.JButton();
         unirseBoton = new javax.swing.JButton();
         labelLogo = new javax.swing.JLabel();
+        botonComoJugar = new javax.swing.JButton();
+        botonOffline = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,31 +56,56 @@ public class Inicio extends javax.swing.JFrame {
             }
         });
 
+        botonComoJugar.setText("Como jugar");
+        botonComoJugar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonComoJugarActionPerformed(evt);
+            }
+        });
+
+        botonOffline.setText("OFFLINE");
+        botonOffline.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonOfflineActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(unirseBoton)
-                    .addComponent(crearBoton))
-                .addGap(264, 264, 264))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(100, 100, 100)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 116, Short.MAX_VALUE)
                 .addComponent(labelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addGap(92, 92, 92))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(260, 260, 260)
+                        .addComponent(botonComoJugar))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(270, 270, 270)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(botonOffline)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(unirseBoton)
+                                .addComponent(crearBoton)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addComponent(labelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addGap(29, 29, 29)
                 .addComponent(crearBoton)
                 .addGap(44, 44, 44)
                 .addComponent(unirseBoton)
-                .addGap(156, 156, 156))
+                .addGap(51, 51, 51)
+                .addComponent(botonOffline)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addComponent(botonComoJugar)
+                .addGap(42, 42, 42))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -106,6 +133,18 @@ public class Inicio extends javax.swing.JFrame {
         cliente.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_unirseBotonActionPerformed
+
+    private void botonComoJugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonComoJugarActionPerformed
+    ComoJugar comoJugar = new ComoJugar();
+    comoJugar.setVisible(true);
+    this.setVisible(false);
+    }//GEN-LAST:event_botonComoJugarActionPerformed
+
+    private void botonOfflineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonOfflineActionPerformed
+     crearMonsterOffline offline = new crearMonsterOffline(10);
+     offline.setVisible(true);
+     this.setVisible(false);
+    }//GEN-LAST:event_botonOfflineActionPerformed
 
     /**
      * @param args the command line arguments
@@ -144,6 +183,8 @@ public class Inicio extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botonComoJugar;
+    private javax.swing.JButton botonOffline;
     private javax.swing.JButton crearBoton;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel labelLogo;
