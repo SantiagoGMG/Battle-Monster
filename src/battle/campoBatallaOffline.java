@@ -21,6 +21,7 @@ import javax.swing.plaf.basic.BasicProgressBarUI;
 
 public class campoBatallaOffline extends javax.swing.JFrame {
 
+    private Random rand = new Random();
     static Monster monster;
     int vida, atq, evasion;
     String imagenMonster;
@@ -39,27 +40,34 @@ public class campoBatallaOffline extends javax.swing.JFrame {
     //iniciamos un objeto elemento con cualquier valor, esto nos servirá despues para obtener los valores que envian los jugadores
     Elementos elementosMio = Elementos.valueOf("piedra");
     Elementos elementosOponente = Elementos.valueOf("piedra");
-    private int rival = 1;
+    private static int NoRival = 1;
 
     /*  Es una matriz que indica las debilidades de cada elemento, 
                     vida , atq , evasion 
-        monster1    12      3      10
-        monster2    14      4      15
+        monster0    0       0      0
+        monster1    12      3      0
+        monster2    14      4      10
         monster3    20      6      20
         monster4    25      8      30
         monster5    30      10     35 
+        monster6    40      15     70
         donde 0 es empate, -1 pierde contra ese elemento, 1 ganas a ese elemento
      */
     private int[][] rivalPC = {
-        {12, 3, 10},
-        {14, 4, 15},
+        {0, 0, 0},
+        {12, 3, 0},
+        {14, 4, 10},
         {20, 6, 20},
         {25, 8, 30},
-        {30, 10, 35},};
-    private String[] attacks = {"piedra", "papel", "tijera"};
+        {30, 10, 35},
+        {40, 15, 70},};
 
-    public campoBatallaOffline(Monster monster) {
+    private String[] attacks = {"piedra", "papel", "tijera"};
+    private int HPMaxRival = rivalPC[NoRival][0];
+
+    public campoBatallaOffline(Monster monster, int NoRival) {
         initComponents();
+        this.NoRival = NoRival;
 
         int vidaMax = monster.getVida();
         this.vida = monster.getVida();
@@ -73,13 +81,16 @@ public class campoBatallaOffline extends javax.swing.JFrame {
         panelFondo.setBackground(new Color(0, 0, 0, 0));
 
         setImage(labelMonster1, "/battle/imagenes/monster/monster5.png");
-        setImage(labelMonster2, "/battle/imagenes/monster/monster" + rival + ".png");
+        setImage(labelMonster2, "/battle/imagenes/monster/monster" + NoRival + ".png");
 
         setImageElementosPPT();
+
         barActualizar(vidaMax, monster.getVida(), 0);
-        tijera(vidaMax, rivalPC[rival][1]);
-        piedra(vidaMax, rivalPC[rival][1]);
-        papel(vidaMax, rivalPC[rival][1]);
+
+        actualizarBarOponente(rivalPC[NoRival][0], rivalPC[NoRival][0]);
+        tijera(vidaMax, rivalPC[NoRival][1]);
+        piedra(vidaMax, rivalPC[NoRival][1]);
+        papel(vidaMax, rivalPC[NoRival][1]);
     }
 
     public void setImage(JLabel labelName, String ruta) {
@@ -160,7 +171,6 @@ public class campoBatallaOffline extends javax.swing.JFrame {
         barVidaOponente.setMinimum(0);
         barVidaOponente.setMaximum(vidaMax);
         barVidaOponente.setStringPainted(true); // Mostrar el valor numérico en la barra
-        vidaActual = vidaActual;
         barVidaOponente.setString(String.valueOf(vidaActual));
         barVidaOponente.setValue(vidaActual); // Valor inicial de la barra de progreso
         barVidaOponente.setUI(new CustomProgressBarUI(Color.BLACK));
@@ -203,7 +213,6 @@ public class campoBatallaOffline extends javax.swing.JFrame {
                 if (seleccion == false) {
                     seleccion = true;
                     setImage(labelTijera, "/battle/imagenes/tijeraOscuro.png");
-                    labelEleccion.setVisible(false);
                     CalculoDelDuelo("tijera", vidaMax, ataqueOponente);
 
                 }
@@ -234,7 +243,6 @@ public class campoBatallaOffline extends javax.swing.JFrame {
                 if (seleccion == false) {
                     seleccion = true;
                     setImage(labelPapel, "/battle/imagenes/papelOscuro.png");
-                    labelEleccion.setVisible(false);
                     CalculoDelDuelo("papel", vidaMax, ataqueOponente);
 
                 }
@@ -264,7 +272,6 @@ public class campoBatallaOffline extends javax.swing.JFrame {
                 if (seleccion == false) {
                     seleccion = true;
                     setImage(labelPiedra, "/battle/imagenes/piedraOscuro.png");
-                    labelEleccion.setVisible(false);
                     CalculoDelDuelo("piedra", vidaMax, ataqueOponente);
 
                 }
@@ -276,9 +283,7 @@ public class campoBatallaOffline extends javax.swing.JFrame {
     /*
         Verifica si esquivaste el ataque por medio de tu evasion
      */
-    public String yoEsquive() {
-
-        Random rand = new Random();
+    public String yoEsquive(int evasion) {
         int esquivar = rand.nextInt(100);
         if (esquivar < evasion) {
             return "1";
@@ -298,63 +303,86 @@ public class campoBatallaOffline extends javax.swing.JFrame {
         en cada caso se usa el metodo enviarDatos para actualizar su progress bar de vida y verificar si alguien gano
      */
     public void CalculoDelDuelo(String miEleccion, int vidaMax, int ataqueOponente) {
-        labelEleccion.setVisible(true);
-        labelEleccion.setText("Usaste " + miEleccion);
+        int rivalAtkRandom = rand.nextInt(3);
+        String rivalAttacks = attacks[rivalAtkRandom];
+
         new Thread(() -> {
-            try {
-                out.writeUTF(miEleccion);
-                //panelEsperar.setVisible(true);
-                String oponenteEleccion = in.readUTF();
-                if (oponenteEleccion != null) {
-                    //panelEsperar.setVisible(false);
-                }
-                String esquivar = yoEsquive();
-                out.writeUTF(esquivar);
-                String oponenteEsquivar = in.readUTF();
+            //out.writeUTF(miEleccion);
+            //panelEsperar.setVisible(true);
+            //String oponenteEleccion = in.readUTF();
 
-                if (esquivar.equals("0") && oponenteEsquivar.equals("0")) {
+            String esquivar = yoEsquive(evasion);
+            String dodgeRival = yoEsquive(rivalPC[NoRival][2]);
+            //out.writeUTF(esquivar);
+            //String oponenteEsquivar = in.readUTF();
 
-                    int mio = elementosMio.valueOf(miEleccion).getValor();
-                    int oponente = elementosOponente.valueOf(oponenteEleccion).getValor();
-                    int parametro = debilidades[mio][oponente];
+            if (esquivar.equals("0") && dodgeRival.equals("0")) {
 
-                    SwingUtilities.invokeLater(() -> {
-                        switch (parametro) {
-                            case 1: {
-                                //enviarDatos(vidaMax);
-                                JOptionPane.showMessageDialog(null, "El oponente uso: " + oponenteEleccion + " le inflijiste " + atq + " de daño");
-                                break;
-                            }
-                            case -1: {
-                                barActualizar(vidaMax, getVida(), ataqueOponente);
-                                //enviarDatos(vidaMax);
-                                JOptionPane.showMessageDialog(null, "El oponente uso: " + oponenteEleccion + " y te infligio " + ataqueOponente + " de daño");
-                                break;
-                            }
-                            case 0: {
-                                JOptionPane.showMessageDialog(null, "El oponente uso: " + oponenteEleccion + "hubo un empate");
-                                break;
-                            }
+                int mio = elementosMio.valueOf(miEleccion).getValor();
+                int oponente = elementosOponente.valueOf(rivalAttacks).getValor();
+                int parametro = debilidades[mio][oponente];
+
+                SwingUtilities.invokeLater(() -> {
+                    switch (parametro) {
+                        case 1: {
+                            //enviarDatos(vidaMax);
+                            JOptionPane.showMessageDialog(null, "El oponente uso: " + rivalAttacks + " le inflijiste " + atq + " de daño");
+                            rivalPC[NoRival][0] = rivalPC[NoRival][0] - atq;
+                            actualizarBarOponente(HPMaxRival, rivalPC[NoRival][0]);
+                            verificarSiGanaste(vida, rivalPC[NoRival][0]);
+                            break;
                         }
-                    });
-                } else if (esquivar.equals("1")) {
-                    //enviarDatos(vidaMax);
-                    JOptionPane.showMessageDialog(null, "El oponente uso: " + oponenteEleccion + " pero lo esquivaste :)");
+                        case -1: {
+                            barActualizar(vidaMax, getVida(), ataqueOponente);
+                            JOptionPane.showMessageDialog(null, "El oponente uso: " + rivalAttacks + " y te infligio " + ataqueOponente + " de daño");
+                            verificarSiGanaste(vida, rivalPC[NoRival][0]);
+                            break;
+                        }
+                        case 0: {
+                            JOptionPane.showMessageDialog(null, "El oponente uso: " + rivalAttacks + " hubo un empate");
+                            break;
+                        }
+                    }
+                });
+            } else if (esquivar.equals("1")) {
+                //enviarDatos(vidaMax);
+                JOptionPane.showMessageDialog(null, "El oponente uso: " + rivalAttacks + " pero lo esquivaste :)");
 
-                } else if (oponenteEsquivar.equals("1")) {
-                    //enviarDatos(vidaMax);
-                    JOptionPane.showMessageDialog(null, "El oponente uso: " + oponenteEleccion + " pero lo esquivo :c");
+            } else if (dodgeRival.equals("1")) {
+                //enviarDatos(vidaMax);
+                JOptionPane.showMessageDialog(null, "El oponente uso: " + rivalAttacks + " pero lo esquivo :c");
 
-                }
-
-            } catch (IOException ex) {
-                java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, "Error en la conexion");
             }
+
             seleccion = false;
             setImageElementosPPT();
-            labelEleccion.setVisible(false);
+
         }).start();
+    }
+
+    public void verificarSiGanaste(int vida, int HPRival) {
+        if (vida <= 0) {
+            JOptionPane.showMessageDialog(null, "You LOSE ");
+            Inicio inicio = new Inicio();
+            inicio.setVisible(true);
+            this.setVisible(false);
+            
+        }
+        if (HPRival <= 0) {
+            
+            if (NoRival != 6) {
+                JOptionPane.showMessageDialog(null, "You WIN, preparate para tu proxima batalla");
+                NoRival = NoRival + 1;
+                crearMonsterOffline crearOffline = new crearMonsterOffline(3, NoRival);
+                crearOffline.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "Congratulations, you defeated all the Monster");
+                this.dispose();
+            }
+
+            this.setVisible(false);
+        }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -365,7 +393,6 @@ public class campoBatallaOffline extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         barVida = new javax.swing.JProgressBar();
         barVidaOponente = new javax.swing.JProgressBar();
-        labelEleccion = new javax.swing.JLabel();
         labelTijera = new javax.swing.JLabel();
         labelPapel = new javax.swing.JLabel();
         labelPiedra = new javax.swing.JLabel();
@@ -431,19 +458,16 @@ public class campoBatallaOffline extends javax.swing.JFrame {
         panelFondo.setLayout(panelFondoLayout);
         panelFondoLayout.setHorizontalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 600, Short.MAX_VALUE)
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(107, 107, 107)
+                .addComponent(labelMonster1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(213, 213, 213)
+                .addComponent(labelMonster2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(115, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panelFondoLayout.createSequentialGroup()
                     .addGap(65, 65, 65)
                     .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(panelFondoLayout.createSequentialGroup()
-                            .addGap(45, 45, 45)
-                            .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(panelFondoLayout.createSequentialGroup()
-                                    .addComponent(labelMonster1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(213, 213, 213)
-                                    .addComponent(labelMonster2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(labelEleccion, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(panelFondoLayout.createSequentialGroup()
                             .addGap(110, 110, 110)
                             .addComponent(labelTijera, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -456,18 +480,17 @@ public class campoBatallaOffline extends javax.swing.JFrame {
         );
         panelFondoLayout.setVerticalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
+                .addContainerGap(249, Short.MAX_VALUE)
+                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelMonster2, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelMonster1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(79, 79, 79))
             .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panelFondoLayout.createSequentialGroup()
                     .addGap(10, 10, 10)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(194, 194, 194)
-                    .addComponent(labelEleccion, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(labelMonster2, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(labelMonster1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGap(300, 300, 300)
                     .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(labelPiedra, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(labelPapel, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -531,7 +554,7 @@ public class campoBatallaOffline extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new campoBatallaOffline(monster).setVisible(true);
+                new campoBatallaOffline(monster, NoRival).setVisible(true);
             }
         });
     }
@@ -540,7 +563,6 @@ public class campoBatallaOffline extends javax.swing.JFrame {
     private javax.swing.JProgressBar barVida;
     private javax.swing.JProgressBar barVidaOponente;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel labelEleccion;
     private javax.swing.JLabel labelMonster1;
     private javax.swing.JLabel labelMonster2;
     private javax.swing.JLabel labelPapel;

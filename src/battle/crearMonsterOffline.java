@@ -5,7 +5,9 @@ import java.awt.Color;
 
 public class crearMonsterOffline extends javax.swing.JFrame {
     private static int puntosTotales;
-    public crearMonsterOffline(int puntos) {
+    private static int NoRival;
+    public crearMonsterOffline(int puntos, int NoRival) {
+        this.NoRival =NoRival;
         this.puntosTotales = puntos + puntosTotales;
         initComponents();
         labelPuntos.setText(String.valueOf(puntosTotales));
@@ -328,7 +330,7 @@ public class crearMonsterOffline extends javax.swing.JFrame {
         atq = Integer.parseInt(labelAtaque.getText());
 
         Monster monster = new Monster(vida, atq, evasion, "null");
-        campoBatallaOffline batallaOffline = new campoBatallaOffline(monster);
+        campoBatallaOffline batallaOffline = new campoBatallaOffline(monster,NoRival);
         batallaOffline.setVisible(true);
         //elegirMonster elegirImagen = new elegirMonster();
         //elegirImagen.setVisible(true);
@@ -381,7 +383,7 @@ public class crearMonsterOffline extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new crearMonsterOffline(puntosTotales).setVisible(true);
+                new crearMonsterOffline(puntosTotales, NoRival).setVisible(true);
             }
         });
     }

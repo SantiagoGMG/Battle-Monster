@@ -141,7 +141,7 @@ public class Inicio extends javax.swing.JFrame {
     }//GEN-LAST:event_botonComoJugarActionPerformed
 
     private void botonOfflineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonOfflineActionPerformed
-     crearMonsterOffline offline = new crearMonsterOffline(10);
+     crearMonsterOffline offline = new crearMonsterOffline(5,1);
      offline.setVisible(true);
      this.setVisible(false);
     }//GEN-LAST:event_botonOfflineActionPerformed
