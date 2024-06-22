@@ -40,7 +40,7 @@ public class crearMonsterOffline extends javax.swing.JFrame {
         labelVida = new javax.swing.JLabel();
         restablecerBoton = new javax.swing.JButton();
         siguienteBoton = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        botonBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -118,10 +118,10 @@ public class crearMonsterOffline extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        botonBack.setText("BACK");
+        botonBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                botonBackActionPerformed(evt);
             }
         });
 
@@ -131,8 +131,8 @@ public class crearMonsterOffline extends javax.swing.JFrame {
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE)
+                .addComponent(botonBack)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 126, Short.MAX_VALUE)
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -216,7 +216,7 @@ public class crearMonsterOffline extends javax.swing.JFrame {
                 .addGap(24, 24, 24))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(botonBack)
                 .addContainerGap())
         );
 
@@ -291,11 +291,11 @@ public class crearMonsterOffline extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ataque_menosActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void botonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBackActionPerformed
         this.setVisible(false);
         Inicio inicio = new Inicio();
         inicio.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_botonBackActionPerformed
 
     private void evasion_menosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_evasion_menosActionPerformed
         int evasion;
@@ -328,7 +328,8 @@ public class crearMonsterOffline extends javax.swing.JFrame {
         atq = Integer.parseInt(labelAtaque.getText());
 
         Monster monster = new Monster(vida, atq, evasion, "null");
-
+        campoBatallaOffline batallaOffline = new campoBatallaOffline(monster);
+        batallaOffline.setVisible(true);
         //elegirMonster elegirImagen = new elegirMonster();
         //elegirImagen.setVisible(true);
         /*CampoBatalla pelear = new CampoBatalla(out,in, monster);
@@ -388,9 +389,9 @@ public class crearMonsterOffline extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ataque_mas;
     private javax.swing.JButton ataque_menos;
+    private javax.swing.JButton botonBack;
     private javax.swing.JButton evasion_mas;
     private javax.swing.JButton evasion_menos;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

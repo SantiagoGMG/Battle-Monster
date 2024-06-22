@@ -41,11 +41,11 @@ public class elegirMonster extends javax.swing.JFrame {
         jPanel1.setBorder(null);
         jPanel1.setBackground(new Color(0, 0, 0, 0));
 
-        setImage(monster1, "/battle/imagenes/monster/monster1a.png");
-        setImage(monster2, "/battle/imagenes/monster/monster2a.png");
-        setImage(monster3, "/battle/imagenes/monster/monster3a.png");
-        setImage(monster4, "/battle/imagenes/monster/monster4a.png");
-        setImage(monster5, "/battle/imagenes/monster/monster5a.png");
+        setImage(monster1, "/battle/imagenes/monster/monster1.png");
+        setImage(monster2, "/battle/imagenes/monster/monster2.png");
+        setImage(monster3, "/battle/imagenes/monster/monster3.png");
+        setImage(monster4, "/battle/imagenes/monster/monster4.png");
+        setImage(monster5, "/battle/imagenes/monster/monster5.png");
         mosnter1();
         mosnter2();
         mosnter3();
