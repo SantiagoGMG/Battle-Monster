@@ -1,5 +1,8 @@
 # Battle-Monster
 ![logo monster](https://github.com/SantiagoGMG/Battle-Monster/assets/144493546/6f5bb332-b5a5-47fe-acc2-0975ba9f46ee)
+
+
+
 **Battle-Monster** es un juego desarrollado en Java en el que dos equipos pueden jugar en línea a través de sus direcciones IP y un puerto específico, utilizando los paquetes `Socket` y `ServerSocket`.
 
 ## Descripción del Juego
