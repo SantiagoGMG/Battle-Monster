@@ -1,6 +1,6 @@
 package battle;
 
-public class jugar {
+public class Play {
 
     public static void main(String[] args) {
         Inicio partida = new Inicio();

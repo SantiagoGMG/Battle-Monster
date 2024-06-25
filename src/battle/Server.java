@@ -24,6 +24,7 @@ public class Server extends javax.swing.JFrame {
     //StoppableTask task = new StoppableTask();
     EscucharRed red = new EscucharRed();
     static boolean bandera;
+    private boolean createServer = false;
     //private static Server server = new Server();
 
     public Server() {
@@ -64,17 +65,17 @@ public class Server extends javax.swing.JFrame {
             while (bandera == true) {
                 try {
                     socket = servidor.accept(); //Espera a que un cliente se conecte y almacena su socket
-                    JOptionPane.showMessageDialog(null, "Tu rival se ha conectado");
+                    JOptionPane.showMessageDialog(null, "Your rival has connected");
                     comenzarBoton.setVisible(true);
                     in = new DataInputStream(socket.getInputStream());
                     out = new DataOutputStream(socket.getOutputStream());
-                    
+
                 } catch (EOFException ex) //El cliente se desconecto
                 {
-                    JOptionPane.showMessageDialog(null, "El cliente se desconectó");
+                    JOptionPane.showMessageDialog(null, "The client was disconnected");
                     break;
                 } catch (SocketException ex) {
-                    
+
                 } catch (Exception ex) {
                     Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -97,7 +98,7 @@ public class Server extends javax.swing.JFrame {
             try {
                 if (servidor != null && !servidor.isClosed()) {
                     servidor.close(); // Cerrar el servidor para liberar el bloqueo en accept()
-                    System.out.println("se cerro");
+                    //System.out.println("se cerro");
                 }
             } catch (IOException e) {
                 Logger.getLogger(EscucharRed.class.getName()).log(Level.SEVERE, null, e);
@@ -122,9 +123,9 @@ public class Server extends javax.swing.JFrame {
 
         jLabel1.setText("IP:");
 
-        jLabel2.setText("Puerto:");
+        jLabel2.setText("Port:");
 
-        comenzarBoton.setText("Comenzar");
+        comenzarBoton.setText("Ready");
         comenzarBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comenzarBotonActionPerformed(evt);
@@ -138,14 +139,14 @@ public class Server extends javax.swing.JFrame {
             }
         });
 
-        iniciarBoton.setText("Iniciar server");
+        iniciarBoton.setText("Create server");
         iniciarBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 iniciarBotonActionPerformed(evt);
             }
         });
 
-        atrasBoton.setText("Atras");
+        atrasBoton.setText("BACK");
         atrasBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 atrasBotonActionPerformed(evt);
@@ -177,7 +178,7 @@ public class Server extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addComponent(atrasBoton)))
-                .addContainerGap(219, Short.MAX_VALUE))
+                .addContainerGap(229, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -224,21 +225,26 @@ public class Server extends javax.swing.JFrame {
     }//GEN-LAST:event_textPuertoActionPerformed
 
     private void iniciarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciarBotonActionPerformed
-        PUERTO = Integer.parseInt(textPuerto.getText());
-        try {
-            servidor = new ServerSocket(PUERTO);
+        if (!createServer) {
+            createServer = true;
+            PUERTO = Integer.parseInt(textPuerto.getText());
+            try {
+                servidor = new ServerSocket(PUERTO);
 
-        } catch (IOException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            JOptionPane.showMessageDialog(null, "Server activated, wait for the rival");
+            bandera = true;
+            red.start();
         }
-        JOptionPane.showMessageDialog(null, "Servidor activado, espere al rival");
-        bandera = true;
-        red.start();
+
 
     }//GEN-LAST:event_iniciarBotonActionPerformed
 
     private void atrasBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atrasBotonActionPerformed
         bandera = false;
+        createServer = false;
         Inicio volverInicio = new Inicio();
         volverInicio.setVisible(true);
         this.setVisible(false);

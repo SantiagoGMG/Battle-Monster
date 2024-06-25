@@ -129,7 +129,7 @@ public class CampoBatalla extends javax.swing.JFrame {
     public void EnivarImagen(String imagen) {
         try {
             out.writeUTF(imagen);
-            JOptionPane.showMessageDialog(null, "Espere al rival");
+            JOptionPane.showMessageDialog(null, "Wait for the opponent ");
             String imagenOponente = in.readUTF();
             setImage(labelMonster2, imagenOponente);
 
@@ -181,26 +181,26 @@ public class CampoBatalla extends javax.swing.JFrame {
             if (Integer.parseInt(vidaOponente) <= 0 && eresServidor == "1") {
                 servidor.close();
                 this.setVisible(false);
-                JOptionPane.showMessageDialog(null, "Haz ganado");
+                    JOptionPane.showMessageDialog(null, "YOU WIN");
                 Inicio inicio = new Inicio();
                 inicio.setVisible(true);
             }
             if (Integer.parseInt(vidaOponente) <= 0 && eresServidor == "0") {
                 this.setVisible(false);
-                JOptionPane.showMessageDialog(null, "Haz ganado");
+                JOptionPane.showMessageDialog(null, "YOU WIN");
                 Inicio inicio = new Inicio();
                 inicio.setVisible(true);
             }
             if (vida <= 0 && eresServidor == "1") {
                 servidor.close();
                 this.setVisible(false);
-                JOptionPane.showMessageDialog(null, "Haz perdido");
+                JOptionPane.showMessageDialog(null, "YOU LOSE");
                 Inicio inicio = new Inicio();
                 inicio.setVisible(true);
             }
             if (vida <= 0 && eresServidor == "0") {
                 this.setVisible(false);
-                JOptionPane.showMessageDialog(null, "Haz perdido");
+                JOptionPane.showMessageDialog(null, "YOU LOSE");
                 //detenerServidor();
                 Inicio inicio = new Inicio();
                 inicio.setVisible(true);
@@ -444,34 +444,34 @@ public class CampoBatalla extends javax.swing.JFrame {
                         switch (parametro) {
                             case 1: {
                                 enviarDatos(vidaMax);
-                                JOptionPane.showMessageDialog(null, "El oponente uso: " + oponenteEleccion + " le inflijiste " + atq + " de daño");
+                                JOptionPane.showMessageDialog(null, "The opponent used: " + oponenteEleccion + " you dealt " + atq + " of damage");
                                 break;
                             }
                             case -1: {
                                 barActualizar(vidaMax, getVida(), ataqueOponente);
                                 enviarDatos(vidaMax);
-                                JOptionPane.showMessageDialog(null, "El oponente uso: " + oponenteEleccion + " y te infligio " + ataqueOponente + " de daño");
+                                JOptionPane.showMessageDialog(null, "The opponent used: " + oponenteEleccion + " he dealt you " + ataqueOponente + " of damage");
                                 break;
                             }
                             case 0: {
-                                JOptionPane.showMessageDialog(null, "El oponente uso: " + oponenteEleccion + "hubo un empate");
+                                JOptionPane.showMessageDialog(null, "The opponent used: " + oponenteEleccion + "there was a tie");
                                 break;
                             }
                         }
                     });
                 } else if (esquivar.equals("1")) {
                     enviarDatos(vidaMax);
-                    JOptionPane.showMessageDialog(null, "El oponente uso: " + oponenteEleccion + " pero lo esquivaste :)");
+                    JOptionPane.showMessageDialog(null, "The opponent used: " + oponenteEleccion + " but you dodged it :)");
 
                 } else if (oponenteEsquivar.equals("1")) {
                     enviarDatos(vidaMax);
-                    JOptionPane.showMessageDialog(null, "El oponente uso: " + oponenteEleccion + " pero lo esquivo :c");
+                    JOptionPane.showMessageDialog(null, "The opponent used: " + oponenteEleccion + " but he dodged it :c");
 
                 }
 
             } catch (IOException ex) {
                 java.util.logging.Logger.getLogger(CampoBatalla.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, "Error en la conexion");
+                JOptionPane.showMessageDialog(null, "Connection error");
             }
             seleccion = false;
             setImageElementosPPT();
@@ -528,7 +528,7 @@ public class CampoBatalla extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Esperando Oponente");
+        jLabel1.setText("WAITING OPPONENT");
 
         javax.swing.GroupLayout panelEsperarLayout = new javax.swing.GroupLayout(panelEsperar);
         panelEsperar.setLayout(panelEsperarLayout);

@@ -48,20 +48,16 @@
                   <Component id="labelLogo" min="-2" pref="404" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="92" max="-2" attributes="0"/>
               </Group>
-              <Group type="102" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="260" max="-2" attributes="0"/>
-                          <Component id="botonComoJugar" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="270" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="260" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="botonComoJugar" alignment="0" min="-2" pref="104" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="crearBoton" max="32767" attributes="0"/>
+                          <Component id="unirseBoton" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                               <Component id="botonOffline" min="-2" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="unirseBoton" min="-2" max="-2" attributes="0"/>
-                                  <Component id="crearBoton" min="-2" max="-2" attributes="0"/>
-                              </Group>
                           </Group>
                       </Group>
                   </Group>
@@ -76,13 +72,13 @@
                   <Component id="labelLogo" min="-2" pref="111" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                   <Component id="crearBoton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
                   <Component id="unirseBoton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
                   <Component id="botonOffline" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="50" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
                   <Component id="botonComoJugar" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+                  <EmptySpace pref="52" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -90,7 +86,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="crearBoton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="CREAR"/>
+            <Property name="text" type="java.lang.String" value="MAKE SERVER"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="crearBotonActionPerformed"/>
@@ -98,7 +94,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="unirseBoton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="UNIRSE"/>
+            <Property name="text" type="java.lang.String" value="JOIN SERVER"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="unirseBotonActionPerformed"/>
@@ -108,7 +104,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="botonComoJugar">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Como jugar"/>
+            <Property name="text" type="java.lang.String" value="HOW PLAY"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonComoJugarActionPerformed"/>

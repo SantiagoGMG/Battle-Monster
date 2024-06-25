@@ -50,7 +50,7 @@ public class campoBatallaOffline extends javax.swing.JFrame {
         monster3    20      6      20
         monster4    25      8      30
         monster5    30      10     35 
-        monster6    40      15     70
+        monster6    40      15     60
         donde 0 es empate, -1 pierde contra ese elemento, 1 ganas a ese elemento
      */
     private int[][] rivalPC = {
@@ -60,7 +60,7 @@ public class campoBatallaOffline extends javax.swing.JFrame {
         {20, 6, 20},
         {25, 8, 30},
         {30, 10, 35},
-        {40, 15, 70},};
+        {40, 15, 60},};
 
     private String[] attacks = {"piedra", "papel", "tijera"};
     private int HPMaxRival = rivalPC[NoRival][0];
@@ -326,7 +326,7 @@ public class campoBatallaOffline extends javax.swing.JFrame {
                     switch (parametro) {
                         case 1: {
                             //enviarDatos(vidaMax);
-                            JOptionPane.showMessageDialog(null, "El oponente uso: " + rivalAttacks + " le inflijiste " + atq + " de daño");
+                            JOptionPane.showMessageDialog(null, "The opponent used: " + rivalAttacks + " you dealt " + atq + " of damage");
                             rivalPC[NoRival][0] = rivalPC[NoRival][0] - atq;
                             actualizarBarOponente(HPMaxRival, rivalPC[NoRival][0]);
                             verificarSiGanaste(vida, rivalPC[NoRival][0]);
@@ -334,23 +334,23 @@ public class campoBatallaOffline extends javax.swing.JFrame {
                         }
                         case -1: {
                             barActualizar(vidaMax, getVida(), ataqueOponente);
-                            JOptionPane.showMessageDialog(null, "El oponente uso: " + rivalAttacks + " y te infligio " + ataqueOponente + " de daño");
+                            JOptionPane.showMessageDialog(null, "The opponent used: " + rivalAttacks + " he dealt you " + ataqueOponente + " of damage");
                             verificarSiGanaste(vida, rivalPC[NoRival][0]);
                             break;
                         }
                         case 0: {
-                            JOptionPane.showMessageDialog(null, "El oponente uso: " + rivalAttacks + " hubo un empate");
+                            JOptionPane.showMessageDialog(null, "The opponent used: " + rivalAttacks + " there was a tie");
                             break;
                         }
                     }
                 });
             } else if (esquivar.equals("1")) {
                 //enviarDatos(vidaMax);
-                JOptionPane.showMessageDialog(null, "El oponente uso: " + rivalAttacks + " pero lo esquivaste :)");
+                JOptionPane.showMessageDialog(null, "The opponent used: " + rivalAttacks + " but you dodged it :)");
 
             } else if (dodgeRival.equals("1")) {
                 //enviarDatos(vidaMax);
-                JOptionPane.showMessageDialog(null, "El oponente uso: " + rivalAttacks + " pero lo esquivo :c");
+                JOptionPane.showMessageDialog(null, "The opponent used: " + rivalAttacks + " but he dodged it :c");
 
             }
 
@@ -363,6 +363,10 @@ public class campoBatallaOffline extends javax.swing.JFrame {
     public void verificarSiGanaste(int vida, int HPRival) {
         if (vida <= 0) {
             JOptionPane.showMessageDialog(null, "You LOSE ");
+            NoRival = 1;
+            
+            crearMonsterOffline crearOffline = new crearMonsterOffline(0, NoRival);
+            crearOffline.setPuntosTotales(0);
             Inicio inicio = new Inicio();
             inicio.setVisible(true);
             this.setVisible(false);

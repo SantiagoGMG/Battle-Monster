@@ -67,7 +67,7 @@
                           <Component id="atrasBoton" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="219" max="32767" attributes="0"/>
+                  <EmptySpace pref="229" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -106,12 +106,12 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Puerto:"/>
+            <Property name="text" type="java.lang.String" value="Port:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="comenzarBoton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Comenzar"/>
+            <Property name="text" type="java.lang.String" value="Ready"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comenzarBotonActionPerformed"/>
@@ -127,7 +127,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="iniciarBoton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Iniciar server"/>
+            <Property name="text" type="java.lang.String" value="Create server"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="iniciarBotonActionPerformed"/>
@@ -135,7 +135,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="atrasBoton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Atras"/>
+            <Property name="text" type="java.lang.String" value="BACK"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="atrasBotonActionPerformed"/>

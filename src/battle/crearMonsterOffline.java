@@ -1,13 +1,14 @@
-
 package battle;
 
 import java.awt.Color;
 
 public class crearMonsterOffline extends javax.swing.JFrame {
+
     private static int puntosTotales;
     private static int NoRival;
+
     public crearMonsterOffline(int puntos, int NoRival) {
-        this.NoRival =NoRival;
+        this.NoRival = NoRival;
         this.puntosTotales = puntos + puntosTotales;
         initComponents();
         labelPuntos.setText(String.valueOf(puntosTotales));
@@ -17,8 +18,17 @@ public class crearMonsterOffline extends javax.swing.JFrame {
         panelFondo.setOpaque(false);
         panelFondo.setBorder(null);
         panelFondo.setBackground(new Color(0, 0, 0, 0));
-        
+
     }
+
+    public static int getPuntosTotales() {
+        return puntosTotales;
+    }
+
+    public static void setPuntosTotales(int puntosTotales) {
+        crearMonsterOffline.puntosTotales = puntosTotales;
+    }
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -46,17 +56,17 @@ public class crearMonsterOffline extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel5.setText("CREA TU MONSTER");
+        jLabel5.setText("MAKE YOUR MONSTER");
 
-        jLabel4.setText("PUNTOS :");
+        jLabel4.setText("POINTS: ");
 
         labelPuntos.setText("5");
 
-        jLabel1.setText("Vida");
+        jLabel1.setText("HP");
 
-        jLabel2.setText("Ataque");
+        jLabel2.setText("ATTACK");
 
-        jLabel3.setText("Evasion");
+        jLabel3.setText("EVASION");
 
         evasion_mas.setText("+");
         evasion_mas.addActionListener(new java.awt.event.ActionListener() {
@@ -106,14 +116,14 @@ public class crearMonsterOffline extends javax.swing.JFrame {
 
         labelVida.setText("10");
 
-        restablecerBoton.setText("RESTABLECER");
+        restablecerBoton.setText("RESET");
         restablecerBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 restablecerBotonActionPerformed(evt);
             }
         });
 
-        siguienteBoton.setText("SIGUIENTE");
+        siguienteBoton.setText("NEXT");
         siguienteBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 siguienteBotonActionPerformed(evt);
@@ -134,9 +144,14 @@ public class crearMonsterOffline extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(botonBack)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 126, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(siguienteBoton)
+                .addGap(45, 45, 45))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(195, 195, 195)
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelFondoLayout.createSequentialGroup()
+                    .addComponent(restablecerBoton, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelFondoLayout.createSequentialGroup()
                                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -167,23 +182,16 @@ public class crearMonsterOffline extends javax.swing.JFrame {
                                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(labelEvasion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(labelVida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(labelAtaque, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                            .addComponent(labelAtaque, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addComponent(labelPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
-                                .addComponent(restablecerBoton)
-                                .addGap(82, 82, 82))
-                            .addComponent(siguienteBoton, javax.swing.GroupLayout.Alignment.TRAILING))))
-                .addGap(111, 111, 111))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(209, Short.MAX_VALUE))
         );
         panelFondoLayout.setVerticalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(117, 117, 117)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
+                .addContainerGap(123, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -213,12 +221,10 @@ public class crearMonsterOffline extends javax.swing.JFrame {
                     .addComponent(evasion_mas))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(restablecerBoton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
-                .addComponent(siguienteBoton)
-                .addGap(24, 24, 24))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(botonBack)
+                .addGap(82, 82, 82)
+                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(botonBack)
+                    .addComponent(siguienteBoton))
                 .addContainerGap())
         );
 
@@ -295,6 +301,8 @@ public class crearMonsterOffline extends javax.swing.JFrame {
 
     private void botonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBackActionPerformed
         this.setVisible(false);
+        puntosTotales = 0;
+        NoRival = 1;
         Inicio inicio = new Inicio();
         inicio.setVisible(true);
     }//GEN-LAST:event_botonBackActionPerformed
@@ -330,7 +338,7 @@ public class crearMonsterOffline extends javax.swing.JFrame {
         atq = Integer.parseInt(labelAtaque.getText());
 
         Monster monster = new Monster(vida, atq, evasion, "null");
-        campoBatallaOffline batallaOffline = new campoBatallaOffline(monster,NoRival);
+        campoBatallaOffline batallaOffline = new campoBatallaOffline(monster, NoRival);
         batallaOffline.setVisible(true);
         //elegirMonster elegirImagen = new elegirMonster();
         //elegirImagen.setVisible(true);

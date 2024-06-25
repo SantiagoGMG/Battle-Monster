@@ -76,18 +76,18 @@ public class Cliente extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("Puerto:");
+        jLabel2.setText("Port:");
 
         textPuerto.setText("5000");
 
-        conectarBoton.setText("Conectar");
+        conectarBoton.setText("Connect");
         conectarBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 conectarBotonActionPerformed(evt);
             }
         });
 
-        atrasBoton.setText("Atras");
+        atrasBoton.setText("BACK");
         atrasBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 atrasBotonActionPerformed(evt);
@@ -107,15 +107,15 @@ public class Cliente extends javax.swing.JFrame {
                             .addComponent(jLabel1))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(conectarBoton))
                             .addComponent(textIP, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
                             .addComponent(textPuerto)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(atrasBoton)))
-                .addContainerGap(230, Short.MAX_VALUE))
+                        .addComponent(atrasBoton))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(254, 254, 254)
+                        .addComponent(conectarBoton)))
+                .addContainerGap(243, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -167,7 +167,7 @@ public class Cliente extends javax.swing.JFrame {
             red.start();
 
         } catch (ConnectException ex) {
-            JOptionPane.showMessageDialog(null, "Conexión fallida");
+            JOptionPane.showMessageDialog(null, "Failed connection");
         } catch (IOException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
