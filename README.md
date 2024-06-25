@@ -1,5 +1,5 @@
 # Battle-Monster
-![Battle Monster Logo](images/battle-monster-logo.png)
+![Battle Monster Logo](src/battle/imagenes/logo monster.png)
 Battle-Monster es un juego desarrollado en Java en el que dos equipos pueden jugar en línea a través de sus direcciones IP y un puerto específico, utilizando los paquetes Socket y ServerSocket.
 
 # Descripción del Juego
