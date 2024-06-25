@@ -13,6 +13,12 @@ Battle-Monster es una versión del clásico juego "Piedra, Papel o Tijera" con u
 
 - **Juego Multijugador en Línea:** Los jugadores pueden conectarse a través de Internet utilizando sus direcciones IP.
 - **Selección de Monster:** Elige entre una variedad de Monster, cada uno con sus propias estadísticas personalizables.
+![monster1a](https://github.com/SantiagoGMG/Battle-Monster/assets/144493546/547207a6-fb86-45cb-ac83-72d92483adb4)
+![monster2a](https://github.com/SantiagoGMG/Battle-Monster/assets/144493546/7ae60e4f-0c9b-4c36-b540-c98602ea7825)
+![monster3a](https://github.com/SantiagoGMG/Battle-Monster/assets/144493546/a7d137ba-5cfb-49c9-ab38-43633edef990)
+![monster4a](https://github.com/SantiagoGMG/Battle-Monster/assets/144493546/459cae61-f628-470f-94f8-0287731bfee4)
+![monster5a](https://github.com/SantiagoGMG/Battle-Monster/assets/144493546/48fc0bed-ffb6-4092-a165-a35d1a44b6c1)
+![monster6](https://github.com/SantiagoGMG/Battle-Monster/assets/144493546/c7e1cb8d-1605-4124-b747-15869e101fe1)
 - **Elementos de Estrategia:** Asigna vida, ataque y evasión a tu monstruo para crear una estrategia única.
 - **Interfaz de Usuario Intuitiva:** Diseño fácil de usar para una experiencia de juego fluida.
 
