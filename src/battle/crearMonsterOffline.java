@@ -8,6 +8,7 @@ public class crearMonsterOffline extends javax.swing.JFrame {
     private static int NoRival;
 
     public crearMonsterOffline(int puntos, int NoRival) {
+        this.setResizable(false);
         this.NoRival = NoRival;
         this.puntosTotales = puntos + puntosTotales;
         initComponents();

@@ -25,6 +25,7 @@ public class elegirMonster extends javax.swing.JFrame {
 //Monster monster = new Monster(vida,atq,evasion,"null");
     public elegirMonster(DataOutputStream out, DataInputStream in, Monster monster,ServerSocket servidor, String eresServidor) {
         initComponents();
+        this.setResizable(false);
         lucharBoton.setVisible(false);
         this.out = out;
         this.in = in;

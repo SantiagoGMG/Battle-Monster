@@ -45,6 +45,7 @@ public class Cliente extends javax.swing.JFrame {
 
     public Cliente() {
         initComponents();
+        this.setResizable(false);
         setLocationRelativeTo(null);
         FondoInicio fondo = new FondoInicio(jPanel1, "/battle/imagenes/ingresar.png");
         jPanel1.add(fondo).repaint();
@@ -69,7 +70,6 @@ public class Cliente extends javax.swing.JFrame {
 
         jLabel1.setText("IP:");
 
-        textIP.setText("192.168.1.116");
         textIP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textIPActionPerformed(evt);

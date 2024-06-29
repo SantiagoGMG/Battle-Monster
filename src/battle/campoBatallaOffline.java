@@ -68,7 +68,7 @@ public class campoBatallaOffline extends javax.swing.JFrame {
     public campoBatallaOffline(Monster monster, int NoRival) {
         initComponents();
         this.NoRival = NoRival;
-
+        this.setResizable(false);
         int vidaMax = monster.getVida();
         this.vida = monster.getVida();
         this.atq = monster.getAtq();

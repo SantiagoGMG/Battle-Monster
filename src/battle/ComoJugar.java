@@ -6,7 +6,9 @@ import java.awt.Color;
 public class ComoJugar extends javax.swing.JFrame {
     
     public ComoJugar() {
+        
         initComponents();
+        this.setResizable(false);
         setLocationRelativeTo(null);
         FondoInicio fondo = new FondoInicio(panelFondo,"/battle/imagenes/libro.jpg");
         panelFondo.add(fondo).repaint();

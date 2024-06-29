@@ -20,6 +20,7 @@ public class crearMonster extends javax.swing.JFrame {
     static String eresServidor;
     public crearMonster(DataOutputStream out, DataInputStream in, ServerSocket servidor,String eresServidor) {
         initComponents();
+        this.setResizable(false);
         this.out = out;
         this.in = in;
         this.servidor = servidor;

@@ -61,6 +61,7 @@ public class CampoBatalla extends javax.swing.JFrame {
 
     public CampoBatalla(DataOutputStream out, DataInputStream in, Monster monster, ServerSocket servidor, String eresServidor) {
         initComponents();
+        this.setResizable(false);
         panelEsperar.setVisible(false);
         int vidaMax = monster.getVida();
         this.vida = monster.getVida();

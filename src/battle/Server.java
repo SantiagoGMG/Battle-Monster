@@ -29,6 +29,7 @@ public class Server extends javax.swing.JFrame {
 
     public Server() {
         initComponents();
+        this.setResizable(false);
         setLocationRelativeTo(null);
         FondoInicio fondo = new FondoInicio(jPanel1, "/battle/imagenes/ingresar.png");
         jPanel1.add(fondo).repaint();
