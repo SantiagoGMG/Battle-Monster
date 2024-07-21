@@ -11,7 +11,7 @@ Battle-Monster is a version of the classic game "Rock, Paper, Scissors" with a P
 
 - **Online Multiplayer Game:** Players can connect over the Internet using their IP addresses.
 - **Monster Selection:** Choose from a variety of Monsters, each with customizable stats.
-- 
+
 ![monster1a](https://github.com/SantiagoGMG/Battle-Monster/assets/144493546/547207a6-fb86-45cb-ac83-72d92483adb4)
 ![monster2a](https://github.com/SantiagoGMG/Battle-Monster/assets/144493546/7ae60e4f-0c9b-4c36-b540-c98602ea7825)
 ![monster3a](https://github.com/SantiagoGMG/Battle-Monster/assets/144493546/a7d137ba-5cfb-49c9-ab38-43633edef990)
@@ -19,7 +19,7 @@ Battle-Monster is a version of the classic game "Rock, Paper, Scissors" with a P
 ![monster5a](https://github.com/SantiagoGMG/Battle-Monster/assets/144493546/48fc0bed-ffb6-4092-a165-a35d1a44b6c1)
 ![monster6](https://github.com/SantiagoGMG/Battle-Monster/assets/144493546/c7e1cb8d-1605-4124-b747-15869e101fe1)
 - **Strategy Elements:** Assign health, attack, and evasion to your Monster to create a unique strategy.
-- 
+
 ![Assign Stats](https://github.com/SantiagoGMG/Battle-Monster/assets/144493546/a2ce9fcb-eccc-40e0-9a29-47d2059c78fe)
 - **Intuitive User Interface:** Easy-to-use design for a smooth gaming experience.
 
